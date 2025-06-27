@@ -1,9 +1,4 @@
 import { errorHandler } from "../../../utils/errorHandler.js";
-import {
-  CreateNewAdminModel,
-  LoginAdminModel,
-} from "./authentication.model.js";
-import bcrypt from "bcryptjs";
 import { UpdateUserAccountStatusModel } from "./user.model.js";
 
 export const FetchAllUsersController = async (req, res, next) => {
