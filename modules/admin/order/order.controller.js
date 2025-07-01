@@ -1,10 +1,7 @@
 import { errorHandler } from "../../../utils/errorHandler.js";
 import {
-  AddOrderItemsModel,
-  CreateNewOrderModel,
   FetchAllOrdersModel,
   GetOrderByIdModel,
-  GetUserOrdersModel,
   UpdateOrderStatusModel,
 } from "./order.model.js";
 

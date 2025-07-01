@@ -1,5 +1,5 @@
 import { errorHandler } from "../../../utils/errorHandler.js";
-import { FindUserByEmailModel } from "./authentication.model.js";
+import { FindUserByEmailModel } from "../authentication/authentication.model.js";
 
 export const FindUserProfileController = async (req, res, next) => {
   const { id } = req.params;

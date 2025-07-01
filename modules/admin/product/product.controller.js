@@ -47,10 +47,28 @@ export const FetchAllProductsController = async (req, res, next) => {
     if (!products || products.length === 0) {
       return next(errorHandler(404, "Products not found"));
     }
+
+    const data = products.map((row) => ({
+      id: row.id,
+      name: row.name,
+      description: row.description,
+      image_1: row.image_1,
+      image_2: row.image_2,
+      image_3: row.image_3,
+      stock: row.stock,
+      price: row.price,
+      // add your other product fields here
+      category: row.category_id
+        ? {
+            id: row.category_id,
+            name: row.category_name,
+          }
+        : null,
+    }));
     res.status(200).json({
       success: true,
       message: "Products fetched successfully",
-      data: products,
+      data: data,
     });
   } catch (error) {
     next(error);
@@ -64,10 +82,28 @@ export const FetchSingleProductController = async (req, res, next) => {
     if (!product || product.length === 0) {
       return next(errorHandler(404, "Product not found"));
     }
+
+    const data = {
+      id: row.id,
+      name: row.name,
+      price: row.price,
+      description: row.description,
+      image_1: row.image_1,
+      image_2: row.image_2,
+      image_3: row.image_3,
+      stock: row.stock,
+      category: row.category_id
+        ? {
+            id: row.category_id,
+            name: row.category_name,
+          }
+        : null,
+    };
+
     res.status(200).json({
       success: true,
       message: "Product fetched successfully",
-      data: product,
+      data: data,
     });
   } catch (error) {
     next(error);

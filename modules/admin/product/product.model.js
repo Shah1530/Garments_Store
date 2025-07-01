@@ -19,15 +19,38 @@ export const CreateNewProductModel = async (
 };
 
 export const FetchAllProductsModel = async () => {
-  const [rows] = await pool.query("SELECT * FROM products");
+  const [rows] = await pool.query(
+    `SELECT
+       p.*,
+       c.id AS category_id,
+       c.name AS category_name
+     FROM
+       products p
+     LEFT JOIN
+       categories c ON p.category_id = c.id`
+  );
 
   return rows;
 };
 
 export const FetchSingleProductModel = async (id) => {
-  const [rows] = await pool.query("SELECT * FROM products WHERE id = ?", [id]);
+  const [rows] = await pool.query(
+    `SELECT
+       p.*,
+       c.id AS category_id,
+       c.name AS category_name,
+     FROM
+       products p
+     LEFT JOIN
+       categories c ON p.category_id = c.id
+     WHERE
+       p.id = ?`,
+    [id]
+  );
 
-  return rows[0];
+  const row = rows[0];
+
+  return row;
 };
 
 export const UpdateSingleProductModel = async (id, updates) => {

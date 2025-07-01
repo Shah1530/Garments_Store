@@ -5,6 +5,10 @@ import {
   FindUserByEmailModel,
   ValidateUserActivationModel,
 } from "./authentication.model.js";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 export const SignUpUserController = async (req, res, next) => {
   const { name, email, password } = req.body;
@@ -18,10 +22,22 @@ export const SignUpUserController = async (req, res, next) => {
 
     const user = await CreateNewUserModel(name, email, hashedPassword);
 
+    const token = jwt.sign(
+      {
+        id: user.id,
+        email: user.email,
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "1d",
+      }
+    );
+
     if (user) {
       res.status(200).json({
         success: true,
         message: "User created successfully",
+        token,
         data: user,
       });
     }
@@ -52,9 +68,21 @@ export const LoginUserController = async (req, res, next) => {
       return next(errorHandler(404, "Invalid Credentials"));
     }
 
+    const token = jwt.sign(
+      {
+        id: existingUser.id,
+        email: existingUser.email,
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "1d",
+      }
+    );
+
     res.status(200).json({
       success: true,
       message: "User logged in successfully",
+      token,
       data: existingUser,
     });
   } catch (error) {

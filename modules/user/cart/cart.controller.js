@@ -6,12 +6,6 @@ import {
   RemoveItemFromTheCartModel,
   UpdateCartQuantityModel,
 } from "./cart.model.js";
-import {
-  DeleteSingleProductModel,
-  FetchAllProductsModel,
-  FetchSingleProductModel,
-  UpdateSingleProductModel,
-} from "./product.model.js";
 
 export const AddNewItemToTheCartController = async (req, res, next) => {
   const { user_id, product_id, quantity } = req.body;

@@ -1,13 +1,16 @@
-import pool from "../config/db.js";
+import pool from "../../../config/db.js";
 
 export const CreateNewOrderModel = async (
   userId,
   totalPrice,
-  paymentMethod
+  paymentMethod,
+  address,
+  phone,
+  trackingId
 ) => {
   const [result] = await pool.query(
-    "INSERT INTO orders (user_id, payment_method, total_price) VALUES (?, ?, ?)",
-    [userId, paymentMethod, totalPrice]
+    "INSERT INTO orders (user_id, payment_method, totalPrice,address, phone, trackingId) VALUES (?, ?, ?, ?, ?,?)",
+    [userId, paymentMethod, totalPrice, address, phone, trackingId]
   );
   return result.insertId;
 };
@@ -15,7 +18,7 @@ export const CreateNewOrderModel = async (
 export const AddOrderItemsModel = async (orderId, items) => {
   const values = items.map((item) => [
     orderId,
-    item.product_id,
+    item.id,
     item.quantity,
     item.price,
   ]);
@@ -23,6 +26,8 @@ export const AddOrderItemsModel = async (orderId, items) => {
     "INSERT INTO order_items (order_id, product_id, quantity, price) VALUES ?",
     [values]
   );
+
+  return true;
 };
 
 export const GetUserOrdersModel = async (userId) => {
@@ -42,4 +47,12 @@ export const GetOrderByIdModel = async (orderId) => {
     [orderId]
   );
   return { ...order, items };
+};
+
+export const TrackOrderModel = async (trackingId) => {
+  const [rows] = await pool.query(
+    "SELECT * FROM orders WHERE trackingId = ? ORDER BY createdAt DESC",
+    [trackingId]
+  );
+  return rows;
 };

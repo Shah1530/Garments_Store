@@ -1,100 +1,150 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700;900&display=swap");
+
+*,
 body {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-  height: 100vh;
-  margin: 0;
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.form-holder {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  text-align: center;
+  min-height: 100vh;
 }
 
-.signin-container {
-  width: 100%;
+.form-holder .form-content {
+  position: relative;
+  text-align: center;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
   display: flex;
+  -webkit-justify-content: center;
   justify-content: center;
+  -webkit-align-items: center;
   align-items: center;
+  padding: 60px;
 }
 
-.signin-box {
-  background: #ffffff;
-  padding: 2rem;
-  border-radius: 1rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+.form-content .form-items {
+  border: 3px solid #000;
+  padding: 40px;
+  display: inline-block;
   width: 100%;
-  max-width: 400px;
-  transition: transform 0.3s ease;
+  min-width: 540px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  text-align: left;
+  -webkit-transition: all 0.4s ease;
+  transition: all 0.4s ease;
 }
 
-.signin-box:hover {
-  transform: translateY(-5px);
+.form-content h3 {
+  color: #000;
+  text-align: left;
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 5px;
 }
 
-.signin-form .form-label {
-  font-weight: 500;
-  color: #333;
+.form-content h3.form-title {
+  margin-bottom: 30px;
 }
 
-.signin-form .form-control {
-  border-radius: 0.5rem;
-  border: 1px solid #ced4da;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+.form-content p {
+  color: #000;
+  text-align: left;
+  font-size: 17px;
+  font-weight: 300;
+  line-height: 20px;
+  margin-bottom: 30px;
 }
 
-.signin-form .form-control:focus {
-  border-color: #007bff;
-  box-shadow: 0 0 8px rgba(0, 123, 255, 0.4);
+.form-content label,
+.was-validated .form-check-input:invalid ~ .form-check-label,
+.was-validated .form-check-input:valid ~ .form-check-label {
+  color: #000;
 }
 
-.signin-form .form-select {
-  border-radius: 0.5rem;
-  transition: border-color 0.3s ease;
-}
-
-.signin-form .form-select:focus {
-  border-color: #007bff;
-  box-shadow: 0 0 8px rgba(0, 123, 255, 0.4);
+.form-content input[type="text"],
+.form-content input[type="password"],
+.form-content input[type="email"],
+.form-content select {
+  width: 100%;
+  padding: 9px 20px;
+  text-align: left;
+  border: 0;
+  outline: 0;
+  border-radius: 6px;
+  background-color: #fff;
+  border: 1px solid #a3a3a3;
+  font-size: 15px;
+  font-weight: 300;
+  color: #8d8d8d;
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  margin-top: 16px;
 }
 
 .btn-primary {
-  background: linear-gradient(90deg, #007bff, #0056b3);
-  border: none;
-  padding: 0.75rem;
-  font-weight: 500;
-  transition: background 0.3s ease, transform 0.3s ease;
+  background-color: #6c757d;
+  outline: none;
+  border: 0px;
+  box-shadow: none;
 }
 
-.btn-primary:hover {
-  background: linear-gradient(90deg, #0056b3, #003d80);
-  transform: scale(1.05);
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+  background-color: #495056;
+  outline: none !important;
+  border: none !important;
+  box-shadow: none;
 }
 
-#errorMessage {
-  margin-top: 0.5rem;
-  display: none;
+.form-content textarea {
+  position: static !important;
+  width: 100%;
+  padding: 8px 20px;
+  border-radius: 6px;
+  text-align: left;
+  background-color: #000;
+  border: 0;
+  font-size: 15px;
+  font-weight: 300;
+  color: #8d8d8d;
+  outline: none;
+  resize: none;
+  height: 120px;
+  -webkit-transition: none;
+  transition: none;
+  margin-bottom: 14px;
 }
 
-a {
-  color: #007bff;
-  text-decoration: none;
-  transition: color 0.3s ease;
+.form-content textarea:hover,
+.form-content textarea:focus {
+  border: 0;
+  background-color: #000;
+  color: #8d8d8d;
 }
 
-a:hover {
-  color: #0056b3;
-  text-decoration: underline;
+.mv-up {
+  margin-top: -9px !important;
+  margin-bottom: 8px !important;
 }
 
-@media (max-width: 576px) {
-  .signin-box {
-    padding: 1.5rem;
-    margin: 1rem;
-  }
-  .signin-form .form-control,
-  .signin-form .form-select {
-    font-size: 0.9rem;
-  }
-  .btn-primary {
-    font-size: 0.9rem;
-    padding: 0.5rem;
-  }
+.invalid-feedback {
+  color: #ff606e;
+}
+
+.valid-feedback {
+  color: #2acc80;
 }
