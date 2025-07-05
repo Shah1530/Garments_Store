@@ -32,7 +32,7 @@ export const AddOrderItemsModel = async (orderId, items) => {
 
 export const GetUserOrdersModel = async (userId) => {
   const [rows] = await pool.query(
-    "SELECT * FROM orders WHERE user_id = ? ORDER BY created_at DESC",
+    "SELECT * FROM orders WHERE user_id = ? ORDER BY createdAt DESC",
     [userId]
   );
   return rows;

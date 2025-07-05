@@ -5,7 +5,7 @@ export const FetchAllOrdersModel = async () => {
     `SELECT orders.*, users.name AS user_name
      FROM orders
      JOIN users ON orders.user_id = users.id
-     ORDER BY orders.created_at DESC`
+     ORDER BY orders.createdAt DESC`
   );
   return rows;
 };

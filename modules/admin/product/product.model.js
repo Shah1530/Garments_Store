@@ -38,7 +38,7 @@ export const FetchSingleProductModel = async (id) => {
     `SELECT
        p.*,
        c.id AS category_id,
-       c.name AS category_name,
+       c.name AS category_name
      FROM
        products p
      LEFT JOIN

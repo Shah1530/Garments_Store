@@ -8,11 +8,77 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="../public/css/my-account.css" />
+    <style>
+      .profile-section {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 30px;
+      }
+      .order-item {
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 15px;
+        background: white;
+      }
+      .order-status {
+        font-weight: bold;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 0.85em;
+      }
+      .status-pending {
+        background: #fff3cd;
+        color: #856404;
+      }
+      .status-processing {
+        background: #cce5ff;
+        color: #004085;
+      }
+      .status-shipped {
+        background: #d4edda;
+        color: #155724;
+      }
+      .status-delivered {
+        background: #d1ecf1;
+        color: #0c5460;
+      }
+      .btn-edit {
+        background: #6c757d;
+        border: none;
+        transition: all 0.3s ease;
+      }
+      .btn-edit:hover {
+        background: #5a6268;
+        transform: translateY(-2px);
+      }
+      .readonly-field {
+        background-color: #e9ecef;
+        cursor: not-allowed;
+      }
+      .loading {
+        display: none;
+        text-align: center;
+        padding: 20px;
+      }
+      .alert {
+        margin-top: 15px;
+      }
+      .navbar-brand {
+        font-weight: bold;
+        color: #495057 !important;
+      }
+      .order-total {
+        font-size: 1.2em;
+        font-weight: bold;
+        color: #28a745;
+      }
+    </style>
   </head>
 
   <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
       <div class="container-fluid">
         <a class="navbar-brand" href="index.html">Online Garments Store</a>
         <button
@@ -26,38 +92,324 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-              <a class="nav-link" href="user-dashboard.html">Dashboard</a>
-            </li>
-            <li class="nav-item">
               <a class="nav-link" href="#" id="logoutBtn">Logout</a>
             </li>
           </ul>
         </div>
       </div>
     </nav>
+
     <div class="container mt-5">
       <h1 class="text-center mb-4">My Account</h1>
-      <form id="profileForm">
-        <div class="mb-3">
-          <label class="form-label">Username</label>
-          <input type="text" class="form-control" id="username" required />
+
+      <!-- Profile Section -->
+      <div class="profile-section">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h3>Profile Information</h3>
+          <button type="button" class="btn btn-edit text-white" id="editBtn">
+            <i class="fas fa-edit"></i> Edit Profile
+          </button>
         </div>
-        <div class="mb-3">
-          <label class="form-label">Email</label>
-          <input type="email" class="form-control" id="email" />
+
+        <div class="loading" id="profileLoading">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          <p class="mt-2">Loading profile...</p>
         </div>
-        <div class="mb-3">
-          <label class="form-label">Phone</label>
-          <input type="text" class="form-control" id="phone" />
+
+        <form id="profileForm" style="display: none">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label class="form-label">Full Name</label>
+                <input
+                  type="text"
+                  class="form-control readonly-field"
+                  id="username"
+                  readonly
+                />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input
+                  type="email"
+                  class="form-control readonly-field"
+                  id="email"
+                  readonly
+                />
+              </div>
+            </div>
+          </div>
+          <div class="d-flex gap-2" id="actionButtons" style="display: none">
+            <button type="submit" class="btn btn-success">Save Changes</button>
+            <button type="button" class="btn btn-secondary" id="cancelBtn">
+              Cancel
+            </button>
+          </div>
+        </form>
+
+        <div id="profileAlert"></div>
+      </div>
+
+      <!-- Orders Section -->
+      <div class="profile-section">
+        <h3 class="mb-3">My Orders</h3>
+
+        <div class="loading" id="ordersLoading">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          <p class="mt-2">Loading orders...</p>
         </div>
-        <div class="mb-3">
-          <label class="form-label">Address</label>
-          <textarea class="form-control" id="address"></textarea>
+
+        <div id="ordersContainer" style="display: none">
+          <div id="ordersList"></div>
         </div>
-        <button type="submit" class="btn btn-primary">Save Changes</button>
-      </form>
+
+        <div id="ordersAlert"></div>
+      </div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../public/js/my-account.js"></script>
+    <script>
+      const profileForm = document.getElementById("profileForm");
+      const editBtn = document.getElementById("editBtn");
+      const cancelBtn = document.getElementById("cancelBtn");
+      const actionButtons = document.getElementById("actionButtons");
+      const profileLoading = document.getElementById("profileLoading");
+      const ordersLoading = document.getElementById("ordersLoading");
+      const ordersContainer = document.getElementById("ordersContainer");
+      const ordersList = document.getElementById("ordersList");
+      const logoutBtn = document.getElementById("logoutBtn");
+
+      let isEditing = false;
+      let originalData = {};
+
+      document.addEventListener("DOMContentLoaded", function () {
+        if (!checkAuth()) return;
+        loadProfileAndOrders();
+      });
+
+      // ✅ Single call: Profile + Orders
+      async function loadProfileAndOrders() {
+        try {
+          profileLoading.style.display = "block";
+          ordersLoading.style.display = "block";
+
+          const token = localStorage.getItem("token");
+          const response = await fetch("/api/user/profile", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          });
+
+          if (!response.ok) {
+            throw new Error(`Profile request failed (${response.status})`);
+          }
+
+          const result = await response.json();
+          console.log(result);
+          const { user, orders } = result.data;
+
+          populateProfileForm(user);
+          displayOrders(orders);
+
+          originalData = { ...user }; // Store original for cancel
+
+          profileLoading.style.display = "none";
+          ordersLoading.style.display = "none";
+          profileForm.style.display = "block";
+          ordersContainer.style.display = "block";
+        } catch (error) {
+          showAlert(
+            "profileAlert",
+            "Error loading data: " + error.message,
+            "danger"
+          );
+          profileLoading.style.display = "none";
+          ordersLoading.style.display = "none";
+        }
+      }
+
+      // ✅ Fill profile form
+      function populateProfileForm(user) {
+        document.getElementById("username").value = user.name || "";
+        document.getElementById("email").value = user.email || "";
+      }
+
+      // ✅ Render orders list
+      function displayOrders(orders) {
+        if (!orders.length) {
+          ordersList.innerHTML = `<p class="text-muted">No orders found.</p>`;
+          return;
+        }
+
+        ordersList.innerHTML = orders
+          .map(
+            (order) => `
+            <div class="order-item border rounded p-3 mb-3 shadow-sm">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <div>
+                  <h5>Order #${order.trackingId || order.id}</h5>
+                  <p class="text-muted mb-1">Date: ${
+                    order.createdAt
+                      ? new Date(order.createdAt).toLocaleDateString()
+                      : "-"
+                  }</p>
+                  <p class="text-muted mb-1">Payment: ${
+                    order.payment_method
+                  }</p>
+                  <p class="text-muted mb-1">Address: ${order.address}</p>
+                  <p class="text-muted mb-1">Phone: ${order.phone}</p>
+                </div>
+                <div class="text-end">
+                  <span class="order-status status-${
+                    order.status || "pending"
+                  }">
+                    ${
+                      order.status
+                        ? order.status.charAt(0).toUpperCase() +
+                          order.status.slice(1)
+                        : "Pending"
+                    }
+                  </span>
+                  <div class="order-total mt-1">
+                    $${order.totalPrice?.toFixed(2) || "0.00"}
+                  </div>
+                </div>
+              </div>
+              ${
+                order.items && order.items.length
+                  ? `<div class="order-items">
+                      <h6>Items:</h6>
+                      ${order.items
+                        .map(
+                          (item) => `
+                        <div class="d-flex justify-content-between">
+                          <span>Product: ${item.product_title} (x${
+                            item.quantity
+                          })</span>
+                          <span>$${item.price.toFixed(2)}</span>
+                        </div>`
+                        )
+                        .join("")}
+                    </div>`
+                  : `<p class="text-muted">No items found.</p>`
+              }
+            </div>
+          `
+          )
+          .join("");
+      }
+
+      // ✅ Edit flow
+      editBtn.addEventListener("click", function () {
+        if (!isEditing) enableEditing();
+      });
+
+      function enableEditing() {
+        isEditing = true;
+        editBtn.textContent = "Editing...";
+        editBtn.disabled = true;
+
+        ["username"].forEach((id) => {
+          const el = document.getElementById(id);
+          el.readOnly = false;
+          el.classList.remove("readonly-field");
+        });
+
+        actionButtons.style.display = "flex";
+      }
+
+      function disableEditing() {
+        isEditing = false;
+        editBtn.textContent = "Edit Profile";
+        editBtn.disabled = false;
+
+        ["username"].forEach((id) => {
+          const el = document.getElementById(id);
+          el.readOnly = true;
+          el.classList.add("readonly-field");
+        });
+
+        actionButtons.style.display = "none";
+      }
+
+      cancelBtn.addEventListener("click", function () {
+        populateProfileForm(originalData);
+        disableEditing();
+        clearAlert("profileAlert");
+      });
+
+      // ✅ Save changes
+      profileForm.addEventListener("submit", async function (e) {
+        e.preventDefault();
+        if (!isEditing) return;
+
+        try {
+          const updatedData = {
+            name: document.getElementById("username").value,
+          };
+
+          const token = localStorage.getItem("token");
+          const response = await fetch("/api/user/profile", {
+            method: "PUT",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(updatedData),
+          });
+
+          if (!response.ok) {
+            throw new Error(`Update failed (${response.status})`);
+          }
+
+          originalData = { ...originalData, ...updatedData };
+          disableEditing();
+          showAlert("profileAlert", "Profile updated successfully!", "success");
+        } catch (error) {
+          showAlert(
+            "profileAlert",
+            "Error updating profile: " + error.message,
+            "danger"
+          );
+        }
+      });
+
+      logoutBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        if (confirm("Are you sure you want to logout?")) {
+          localStorage.removeItem("token");
+          window.location.href = "signin.html";
+        }
+      });
+
+      function showAlert(containerId, message, type) {
+        const container = document.getElementById(containerId);
+        container.innerHTML = `
+          <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          </div>`;
+      }
+
+      function clearAlert(containerId) {
+        document.getElementById(containerId).innerHTML = "";
+      }
+
+      function checkAuth() {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          window.location.href = "signin.html";
+          return false;
+        }
+        return true;
+      }
+    </script>
   </body>
 </html>

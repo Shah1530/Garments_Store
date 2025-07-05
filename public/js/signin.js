@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (role === "admin") {
           window.location.href = "admin/dashboard.html";
         } else {
-          window.location.href = "user-dashboard.html";
+          window.location.href = "my-account.html";
         }
       } else {
         errorMessage.textContent = data.message || "Sign-in failed.";

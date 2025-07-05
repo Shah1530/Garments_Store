@@ -106,6 +106,7 @@
             if (response.ok) {
               alert("Login successful!");
               localStorage.setItem("token", result.token);
+              localStorage.setItem("u2yCwN4hBx", result.role);
               // Optionally redirect:
               window.location.href = "/"; // or your desired page
             } else {

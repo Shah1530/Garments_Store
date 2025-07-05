@@ -29,7 +29,7 @@ export const SignUpUserController = async (req, res, next) => {
       },
       process.env.JWT_SECRET,
       {
-        expiresIn: "1d",
+        expiresIn: "365d",
       }
     );
 
@@ -39,6 +39,9 @@ export const SignUpUserController = async (req, res, next) => {
         message: "User created successfully",
         token,
         data: user,
+        role: user.is_admin
+          ? "62330a0c-a52c-4632-b39b-7c3c90bd1f87"
+          : "606a1897-1211-4750-958a-3e7f7525ed03",
       });
     }
     return next(errorHandler(404, "User not found"));
@@ -75,7 +78,7 @@ export const LoginUserController = async (req, res, next) => {
       },
       process.env.JWT_SECRET,
       {
-        expiresIn: "1d",
+        expiresIn: "365d",
       }
     );
 
@@ -84,6 +87,9 @@ export const LoginUserController = async (req, res, next) => {
       message: "User logged in successfully",
       token,
       data: existingUser,
+      role: existingUser.is_admin
+        ? "62330a0c-a52c-4632-b39b-7c3c90bd1f87"
+        : "606a1897-1211-4750-958a-3e7f7525ed03",
     });
   } catch (error) {
     next(error);

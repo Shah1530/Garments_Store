@@ -1,5 +1,8 @@
 import { errorHandler } from "../../../utils/errorHandler.js";
-import { UpdateUserAccountStatusModel } from "./user.model.js";
+import {
+  FetchAllUsersModel,
+  UpdateUserAccountStatusModel,
+} from "./user.model.js";
 
 export const FetchAllUsersController = async (req, res, next) => {
   try {
@@ -10,7 +13,8 @@ export const FetchAllUsersController = async (req, res, next) => {
 
     res.status(200).json({
       success: true,
-      message: "Admin created successfully",
+      message: "Users fetched successfully",
+      data: users,
     });
   } catch (error) {
     next(error);
@@ -32,7 +36,6 @@ export const UpdateUserAccountStatusController = async (req, res, next) => {
         status == 0
           ? "User blocked successfully"
           : "User unblocked successfully",
-      data: user,
     });
   } catch (error) {
     next(error);

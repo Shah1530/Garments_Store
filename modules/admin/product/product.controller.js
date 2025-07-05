@@ -84,18 +84,18 @@ export const FetchSingleProductController = async (req, res, next) => {
     }
 
     const data = {
-      id: row.id,
-      name: row.name,
-      price: row.price,
-      description: row.description,
-      image_1: row.image_1,
-      image_2: row.image_2,
-      image_3: row.image_3,
-      stock: row.stock,
-      category: row.category_id
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      description: product.description,
+      image_1: product.image_1,
+      image_2: product.image_2,
+      image_3: product.image_3,
+      stock: product.stock,
+      category: product.category_id
         ? {
-            id: row.category_id,
-            name: row.category_name,
+            id: product.category_id,
+            name: product.category_name,
           }
         : null,
     };

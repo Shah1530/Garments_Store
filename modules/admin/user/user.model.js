@@ -7,10 +7,10 @@ export const FetchAllUsersModel = async () => {
 };
 
 export const UpdateUserAccountStatusModel = async (id, is_active) => {
-  const [rows] = await pool.query(
+  const [result] = await pool.query(
     "UPDATE users SET is_active = ? WHERE id = ?",
     [is_active, id]
   );
 
-  return rows[0];
+  return result; // This is an object, not an array
 };
