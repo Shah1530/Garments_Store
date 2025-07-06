@@ -4,6 +4,7 @@ import {
   DeleteSingleCategoryModel,
   FetchAllCategoriesModel,
   FetchSingleCategoryModel,
+  UpdateSingleCategoryModel,
 } from "./category.model.js";
 
 export const CreateNewCategoryController = async (req, res, next) => {
@@ -59,7 +60,7 @@ export const UpdateSingleCategoryController = async (req, res, next) => {
   const { id } = req.params;
   const { name } = req.body;
   try {
-    const category = await UpdateSingleProductModel(id, name);
+    const category = await UpdateSingleCategoryModel(id, name);
 
     if (!category || category.affectedRows === 0) {
       return next(errorHandler(404, "Category not found or nothing updated"));

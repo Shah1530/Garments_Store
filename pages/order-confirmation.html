@@ -91,6 +91,20 @@
       } else {
         document.getElementById("trackingId").textContent = "Unavailable";
       }
+
+      const token = localStorage.getItem("token");
+      const authLink = document.getElementById("auth-link");
+
+      if (!token) {
+        window.location.href = "index.html";
+      }
+
+      const logoutBtn = document.getElementById("logoutBtn");
+      logoutBtn.addEventListener("click", () => {
+        localStorage.removeItem("token");
+        sessionStorage.removeItem("token");
+        window.location.href = "../index.html";
+      });
     </script>
   </body>
 </html>

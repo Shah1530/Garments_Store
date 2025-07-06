@@ -1,14 +1,14 @@
 import express from "express";
 import {
-  CreateNewOrderController,
+  FetchAllOrdersController,
   GetOrderByIdController,
-  GetUserOrdersController,
+  UpdateOrderStatusController,
 } from "./order.controller.js";
 
 const router = express.Router();
 
-router.post("/", CreateNewOrderController);
-router.get("/user/:id", GetUserOrdersController);
+router.get("/", FetchAllOrdersController);
 router.get("/:id", GetOrderByIdController);
+router.put("/:id", UpdateOrderStatusController);
 
 export default router;
