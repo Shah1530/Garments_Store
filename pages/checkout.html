@@ -29,7 +29,9 @@
               <a class="nav-link" href="my-account.html">Profile</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#" id="logoutBtn">Logout</a>
+              <p class="nav-link" style="cursor: pointer" id="logoutBtn">
+                Logout
+              </p>
             </li>
           </ul>
         </div>
@@ -106,6 +108,15 @@
           window.location.href = "index.html";
           return;
         }
+
+        const authLink = document.getElementById("auth-link");
+
+        const logoutBtn = document.getElementById("logoutBtn");
+        logoutBtn.addEventListener("click", () => {
+          localStorage.removeItem("token");
+          sessionStorage.removeItem("token");
+          window.location.href = "../index.html";
+        });
 
         const cart = JSON.parse(localStorage.getItem("cart")) || [];
         const checkoutItems = document.getElementById("checkoutItems");

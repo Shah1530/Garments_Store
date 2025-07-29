@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const token = data.token;
         localStorage.setItem("token", token);
         if (role === "admin") {
-          window.location.href = "admin/dashboard.html";
+          window.location.href = "admin/index.html";
         } else {
           window.location.href = "my-account.html";
         }

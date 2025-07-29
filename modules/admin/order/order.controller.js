@@ -15,7 +15,7 @@ export const FetchAllOrdersController = async (req, res, next) => {
 
     res.status(200).json({
       success: true,
-      message: "Order created successfully",
+      message: "Orders fetched successfully",
       data: orders,
     });
     return next(errorHandler(404, "Something went wrong"));

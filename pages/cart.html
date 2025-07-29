@@ -32,9 +32,7 @@
             <li class="nav-item">
               <a class="nav-link" href="categories.html">Categories</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="signin.html">Sign In</a>
-            </li>
+            <li id="auth-link" class="nav-item"></li>
           </ul>
         </div>
       </div>
@@ -49,6 +47,33 @@
 
     <script>
       document.addEventListener("DOMContentLoaded", () => {
+        const token = localStorage.getItem("token");
+        const authLink = document.getElementById("auth-link");
+
+        if (token) {
+          authLink.innerHTML = `
+            <li class="nav-item" style="display:flex;">
+              <a class="nav-link" href="my-account.html">My Account</a>
+              <p class="nav-link" style="cursor: pointer;" id="logoutBtn">Logout</p>
+            </li>
+          `;
+        } else {
+          authLink.innerHTML = `
+            <li class="nav-item" style="display:flex;">
+              <a class="nav-link" href="signin.html">Sign In</a>
+              <a class="nav-link" href="signup.html">Sign Up</a>
+            </li>
+          `;
+        }
+        if (token) {
+          const logoutBtn = document.getElementById("logoutBtn");
+          logoutBtn.addEventListener("click", () => {
+            localStorage.removeItem("token");
+            sessionStorage.removeItem("token");
+            window.location.href = "../index.html";
+          });
+        }
+
         const cartContent = document.getElementById("cartContent");
 
         const getCart = () => JSON.parse(localStorage.getItem("cart")) || [];

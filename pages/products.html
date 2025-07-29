@@ -83,12 +83,7 @@
             <li class="nav-item">
               <a class="nav-link" href="categories.html">Categories</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="cart.html">Cart</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="signin.html">Sign In</a>
-            </li>
+            <li class="nav-item" id="auth-link"></li>
           </ul>
         </div>
       </div>
@@ -108,8 +103,38 @@
     <!-- Dynamic product loader -->
     <script>
       document.addEventListener("DOMContentLoaded", async () => {
+        const token = localStorage.getItem("token");
+        const authLink = document.getElementById("auth-link");
+
+        if (token) {
+          authLink.innerHTML = `
+            <li class="nav-item" style="display:flex;">
+              <a class="nav-link" href="my-account.html">My Account</a>
+              <p class="nav-link" style="cursor: pointer;" id="logoutBtn">Logout</p>
+            </li>
+          `;
+        } else {
+          authLink.innerHTML = `
+            <li class="nav-item" style="display:flex;">
+              <a class="nav-link" href="signin.html">Sign In</a>
+              <a class="nav-link" href="signup.html">Sign Up</a>
+            </li>
+          `;
+        }
+
+        const logoutBtn = document.getElementById("logoutBtn");
+        logoutBtn.addEventListener("click", () => {
+          localStorage.removeItem("token");
+          sessionStorage.removeItem("token");
+          window.location.href = "../index.html";
+        });
+
         let productsFetch = [];
         const container = document.getElementById("products-container");
+
+        window.onProductClick = (id) => {
+          location.href = `products-details.html?id=${id}`;
+        };
 
         const getCart = () => JSON.parse(localStorage.getItem("cart")) || [];
         const saveCart = (cart) =>
@@ -145,7 +170,7 @@
             const inCart = isInCart(product.id);
 
             col.innerHTML = `
-              <div class="product-card">
+              <div class="product-card" onclick="onProductClick(${product.id})">
                 <img src="${product.image_1}" alt="${product.name}" />
                 <div class="card-body p-3">
                   <h5 class="card-title">${product.name}</h5>

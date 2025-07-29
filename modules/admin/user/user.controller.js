@@ -1,8 +1,35 @@
 import { errorHandler } from "../../../utils/errorHandler.js";
 import {
+  CreateNewAdminModel,
   FetchAllUsersModel,
+  FindAdminWithEmailModel,
   UpdateUserAccountStatusModel,
 } from "./user.model.js";
+import bcrypt from "bcryptjs";
+
+export const CreateNewAdminController = async (req, res, next) => {
+  const { name, email, password } = req.body;
+  try {
+    const existingAdmin = await FindAdminWithEmailModel(email);
+    if (existingAdmin) {
+      return next(errorHandler(404, "User already exists"));
+    }
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = await CreateNewAdminModel(name, email, hashedPassword);
+
+    if (!user) {
+      return next(errorHandler(404, "User not found"));
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Admin created successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
 export const FetchAllUsersController = async (req, res, next) => {
   try {

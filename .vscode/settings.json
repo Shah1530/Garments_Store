@@ -17,9 +17,6 @@
     "[Aura Dracula Spirit (Soft)]": {
       "editorSuggestWidget.selectedBackground": "#3A334B",
       "sideBar.background": "#191521"
-    },
-    "activityBar.background": "#111E83",
-    "titleBar.activeBackground": "#182AB7",
-    "titleBar.activeForeground": "#F9FAFE"
+    }
   }
 }
