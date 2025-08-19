@@ -33,11 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
       signinLink.style.display = "none";
       dashboardLink.style.display = "block";
       logoutLink.style.display = "block";
-<<<<<<< HEAD
-
-=======
       
->>>>>>> 2af84b33cbb9ac83a17904d7963d0a950bb6f726
       const logoutBtn = document.getElementById("logoutBtn");
       logoutBtn?.addEventListener("click", handleLogout);
     }
@@ -46,24 +42,13 @@ document.addEventListener("DOMContentLoaded", () => {
   function handleLogout(e) {
     e.preventDefault();
     localStorage.removeItem("token");
-<<<<<<< HEAD
-    localStorage.removeItem("u2yCwN4hBx");
-    sessionStorage.removeItem("token");
-    sessionStorage.removeItem("u2yCwN4hBx");
-
-=======
     sessionStorage.removeItem("token");
     
->>>>>>> 2af84b33cbb9ac83a17904d7963d0a950bb6f726
     // Update UI
     signinLink.style.display = "block";
     dashboardLink.style.display = "none";
     logoutLink.style.display = "none";
-<<<<<<< HEAD
-
-=======
     
->>>>>>> 2af84b33cbb9ac83a17904d7963d0a950bb6f726
     showNotification("Logged out successfully!", "success");
     setTimeout(() => window.location.href = "index.html", 1000);
   }
@@ -91,17 +76,10 @@ document.addEventListener("DOMContentLoaded", () => {
   // Scroll Effects
   function setupScrollEffects() {
     let lastScrollTop = 0;
-<<<<<<< HEAD
-
-    window.addEventListener("scroll", throttle(() => {
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
-=======
     
     window.addEventListener("scroll", throttle(() => {
       const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
       
->>>>>>> 2af84b33cbb9ac83a17904d7963d0a950bb6f726
       // Navbar background change
       if (scrollTop > 100) {
         navbar?.classList.add("scrolled");
@@ -149,15 +127,9 @@ document.addEventListener("DOMContentLoaded", () => {
   async function fetchProducts() {
     try {
       showLoading(true);
-<<<<<<< HEAD
-
-      const response = await fetch("http://localhost:3000/api/products", {
-        headers: {
-=======
       
       const response = await fetch("http://localhost:3000/api/products", {
         headers: { 
->>>>>>> 2af84b33cbb9ac83a17904d7963d0a950bb6f726
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json"
         },
@@ -177,11 +149,7 @@ document.addEventListener("DOMContentLoaded", () => {
       filteredProducts = products;
       renderProducts(products.slice(0, 8));
       updateCartBadge();
-<<<<<<< HEAD
-
-=======
       
->>>>>>> 2af84b33cbb9ac83a17904d7963d0a950bb6f726
     } catch (error) {
       console.error("Error fetching products:", error);
       showErrorState();
@@ -192,15 +160,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function renderProducts(products) {
     if (!featuredProducts) return;
-<<<<<<< HEAD
-
-    featuredProducts.innerHTML = "";
-
-=======
     
     featuredProducts.innerHTML = "";
     
->>>>>>> 2af84b33cbb9ac83a17904d7963d0a950bb6f726
     if (products.length === 0) {
       showEmptyState();
       return;
@@ -216,21 +178,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const col = document.createElement("div");
     col.className = "col-lg-3 col-md-6 mb-4";
     col.style.animationDelay = `${index * 0.1}s`;
-<<<<<<< HEAD
-
-    col.innerHTML = `
-      <div class="product-card">
-        <div class="product-image">
-          <img src="${product.image_url || 'https://via.placeholder.com/300x250'}"
-               alt="${product.name}"
-=======
     
     col.innerHTML = `
       <div class="product-card">
         <div class="product-image">
           <img src="${product.image_url || 'https://via.placeholder.com/300x250'}" 
                alt="${product.name}" 
->>>>>>> 2af84b33cbb9ac83a17904d7963d0a950bb6f726
                loading="lazy"
                onerror="this.src='https://via.placeholder.com/300x250'">
           <div class="product-overlay">
@@ -257,11 +210,7 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
       </div>
     `;
-<<<<<<< HEAD
-
-=======
     
->>>>>>> 2af84b33cbb9ac83a17904d7963d0a950bb6f726
     return col;
   }
 
@@ -269,37 +218,21 @@ document.addEventListener("DOMContentLoaded", () => {
   function handleSearch(e) {
     e.preventDefault();
     const query = searchInput.value.toLowerCase().trim();
-<<<<<<< HEAD
-
-=======
     
->>>>>>> 2af84b33cbb9ac83a17904d7963d0a950bb6f726
     if (!query) {
       renderProducts(allProducts.slice(0, 8));
       return;
     }
-<<<<<<< HEAD
-
-    const results = allProducts.filter(product =>
-=======
     
     const results = allProducts.filter(product => 
->>>>>>> 2af84b33cbb9ac83a17904d7963d0a950bb6f726
       product.name.toLowerCase().includes(query) ||
       product.category.toLowerCase().includes(query) ||
       (product.description && product.description.toLowerCase().includes(query))
     );
-<<<<<<< HEAD
-
-    filteredProducts = results;
-    renderProducts(results.slice(0, 8));
-
-=======
     
     filteredProducts = results;
     renderProducts(results.slice(0, 8));
     
->>>>>>> 2af84b33cbb9ac83a17904d7963d0a950bb6f726
     if (results.length === 0) {
       showNoResultsMessage(query);
     }
@@ -307,11 +240,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function handleLiveSearch() {
     const query = searchInput.value.toLowerCase().trim();
-<<<<<<< HEAD
-
-=======
     
->>>>>>> 2af84b33cbb9ac83a17904d7963d0a950bb6f726
     if (query.length > 2) {
       handleSearch({ preventDefault: () => {} });
     } else if (query.length === 0) {
@@ -322,25 +251,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // Filter Functionality
   function handleFilter(filter) {
     currentFilter = filter;
-<<<<<<< HEAD
-
-    // Update active button
-    filterButtons.forEach(btn => btn.classList.remove("active"));
-    document.querySelector(`[data-filter="${filter}"]`)?.classList.add("active");
-
-    // Filter products
-    let filtered = allProducts;
-
-    if (filter !== "all") {
-      filtered = allProducts.filter(product =>
-        product.category.toLowerCase().includes(filter.toLowerCase())
-      );
-    }
-
-    filteredProducts = filtered;
-    renderProducts(filtered.slice(0, 8));
-
-=======
     
     // Update active button
     filterButtons.forEach(btn => btn.classList.remove("active"));
@@ -358,7 +268,6 @@ document.addEventListener("DOMContentLoaded", () => {
     filteredProducts = filtered;
     renderProducts(filtered.slice(0, 8));
     
->>>>>>> 2af84b33cbb9ac83a17904d7963d0a950bb6f726
     // Animate filter change
     featuredProducts.style.opacity = "0.5";
     setTimeout(() => {
@@ -370,20 +279,12 @@ document.addEventListener("DOMContentLoaded", () => {
   function handleNewsletterSubscription(e) {
     e.preventDefault();
     const email = e.target.querySelector('input[type="email"]').value;
-<<<<<<< HEAD
-
-=======
     
->>>>>>> 2af84b33cbb9ac83a17904d7963d0a950bb6f726
     if (!isValidEmail(email)) {
       showNotification("Please enter a valid email address", "error");
       return;
     }
-<<<<<<< HEAD
-
-=======
     
->>>>>>> 2af84b33cbb9ac83a17904d7963d0a950bb6f726
     // Simulate API call (replace with actual endpoint later)
     setTimeout(() => {
       showNotification("Thank you for subscribing to our newsletter!", "success");
@@ -396,11 +297,7 @@ document.addEventListener("DOMContentLoaded", () => {
     e.preventDefault();
     const targetId = e.currentTarget.getAttribute("href");
     const targetElement = document.querySelector(targetId);
-<<<<<<< HEAD
-
-=======
     
->>>>>>> 2af84b33cbb9ac83a17904d7963d0a950bb6f726
     if (targetElement) {
       const offsetTop = targetElement.offsetTop - 80; // Account for fixed navbar
       window.scrollTo({
@@ -448,17 +345,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const fullStars = Math.floor(rating);
     const hasHalfStar = rating % 1 !== 0;
     let stars = "";
-<<<<<<< HEAD
-
-    for (let i = 0; i < fullStars; i++) {
-      stars += '<i class="fas fa-star text-warning"></i>';
-    }
-
-    if (hasHalfStar) {
-      stars += '<i class="fas fa-star-half-alt text-warning"></i>';
-    }
-
-=======
     
     for (let i = 0; i < fullStars; i++) {
       stars += '<i class="fas fa-star text-warning"></i>';
@@ -468,16 +354,11 @@ document.addEventListener("DOMContentLoaded", () => {
       stars += '<i class="fas fa-star-half-alt text-warning"></i>';
     }
     
->>>>>>> 2af84b33cbb9ac83a17904d7963d0a950bb6f726
     const emptyStars = 5 - Math.ceil(rating);
     for (let i = 0; i < emptyStars; i++) {
       stars += '<i class="far fa-star text-warning"></i>';
     }
-<<<<<<< HEAD
-
-=======
     
->>>>>>> 2af84b33cbb9ac83a17904d7963d0a950bb6f726
     return stars;
   }
 
@@ -489,11 +370,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // UI State Management
   function showLoading(show) {
     if (!featuredProducts) return;
-<<<<<<< HEAD
-
-=======
     
->>>>>>> 2af84b33cbb9ac83a17904d7963d0a950bb6f726
     if (show) {
       featuredProducts.innerHTML = `
         <div class="col-12 text-center">
@@ -508,11 +385,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function showErrorState() {
     if (!featuredProducts) return;
-<<<<<<< HEAD
-
-=======
     
->>>>>>> 2af84b33cbb9ac83a17904d7963d0a950bb6f726
     featuredProducts.innerHTML = `
       <div class="col-12 text-center">
         <div class="error-state py-5">
@@ -562,15 +435,9 @@ document.addEventListener("DOMContentLoaded", () => {
       ${message}
       <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     `;
-<<<<<<< HEAD
-
-    document.body.appendChild(notification);
-
-=======
     
     document.body.appendChild(notification);
     
->>>>>>> 2af84b33cbb9ac83a17904d7963d0a950bb6f726
     setTimeout(() => {
       notification.remove();
     }, 5000);
@@ -609,8 +476,4 @@ document.addEventListener("DOMContentLoaded", () => {
     showNotification("Product added to wishlist!", "success");
     // Add wishlist logic here later
   };
-<<<<<<< HEAD
 });
-=======
-});
->>>>>>> 2af84b33cbb9ac83a17904d7963d0a950bb6f726

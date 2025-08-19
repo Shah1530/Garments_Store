@@ -62,13 +62,13 @@ INSERT INTO `categories` (`id`, `name`) VALUES
 CREATE TABLE `orders` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `status` VARCHAR(50) NOT NULL DEFAULT 'pending',
-  `payment_method` TEXT NOT NULL,
-  `phone` TEXT NOT NULL,
-  `address` TEXT NOT NULL,
-  `trackingId` TEXT NOT NULL,
+  `status` text NOT NULL DEFAULT 'pending',
+  `payment_method` text NOT NULL,
+  `phone` text NOT NULL,
+  `address` text NOT NULL,
+  `trackingId` text NOT NULL,
   `totalPrice` int(11) NOT NULL,
-  `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP()
+  `createdAt` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --

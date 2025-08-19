@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-<<<<<<< HEAD
 
 <head>
   <meta charset="UTF-8" />
@@ -95,9 +94,6 @@
             <a class="nav-link" href="../Index.html">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="index.html">Dashboard</a>
-          </li>
-          <li class="nav-item">
             <a class="nav-link" href="products.html">Products</a>
           </li>
           <li class="nav-item">
@@ -106,10 +102,10 @@
           <li class="nav-item">
             <a class="nav-link" href="orders.html">Orders</a>
           </li>
-
           <li class="nav-item">
             <a class="nav-link" href="users.html">Users</a>
           </li>
+
           <li class="nav-item">
             <a class="nav-link" href="../create-admin.html">Create Admin</a>
           </li>
@@ -243,10 +239,7 @@
       // Setup logout functionality
       document.getElementById("logoutBtn").addEventListener("click", (e) => {
         e.preventDefault();
-        localStorage.removeItem("token");
         localStorage.removeItem("u2yCwN4hBx");
-        sessionStorage.removeItem("token");
-        sessionStorage.removeItem("u2yCwN4hBx");
         window.location.href = "/index.html";
       });
     });
@@ -317,343 +310,12 @@
             ? `<br><small class="text-muted">Tracking: ${order.trackingId}</small>`
             : ""
           }
-=======
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Manage Orders - Online Garments Store</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <style>
-      body {
-        background-color: #f8f9fa;
-      }
-      .navbar-brand {
-        font-weight: bold;
-      }
-      .table-container {
-        background: white;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        padding: 20px;
-      }
-      .status-badge {
-        font-size: 0.875rem;
-        padding: 0.25rem 0.75rem;
-      }
-      .btn-sm {
-        font-size: 0.875rem;
-        padding: 0.375rem 0.75rem;
-      }
-      .loading {
-        text-align: center;
-        padding: 40px;
-      }
-      .error {
-        color: #dc3545;
-        text-align: center;
-        padding: 20px;
-      }
-      .order-items {
-        font-size: 0.875rem;
-        color: #6c757d;
-      }
-      .order-item {
-        margin-bottom: 5px;
-      }
-      .order-total {
-        font-weight: bold;
-        color: #28a745;
-      }
-      .collapse-toggle {
-        cursor: pointer;
-        color: #007bff;
-        text-decoration: none;
-      }
-      .collapse-toggle:hover {
-        text-decoration: underline;
-      }
-      .order-details {
-        background-color: #f8f9fa;
-        padding: 15px;
-        border-radius: 5px;
-        margin-top: 10px;
-      }
-      .search-box {
-        max-width: 300px;
-        margin-bottom: 20px;
-      }
-    </style>
-  </head>
-
-  <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="admin/index.html">Garments Store Admin</a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="products.html">Products</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="users.html">Users</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#" id="logoutBtn">Logout</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-
-    <div class="container mt-5">
-      <h1 class="text-center mb-4">Manage Orders</h1>
-
-      <div class="table-container">
-        <!-- Search Box -->
-        <div class="search-box">
-          <input
-            type="text"
-            class="form-control"
-            id="searchInput"
-            placeholder="Search by order ID, customer name, or tracking ID..."
-            onkeyup="searchOrders(this.value)"
-          />
-        </div>
-
-        <div id="loadingSpinner" class="loading">
-          <div class="spinner-border text-primary" role="status">
-            <span class="visually-hidden">Loading...</span>
-          </div>
-          <p class="mt-2">Loading orders...</p>
-        </div>
-
-        <div id="errorMessage" class="error d-none">
-          <p>Failed to load orders. Please try again.</p>
-          <button class="btn btn-primary" onclick="loadOrders()">Retry</button>
-        </div>
-
-        <div class="table-responsive">
-          <table class="table table-striped d-none" id="ordersTable">
-            <thead>
-              <tr>
-                <th>Order ID</th>
-                <th>Customer</th>
-                <th>Status</th>
-                <th>Payment Method</th>
-                <th>Total</th>
-                <th>Date</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- Order Details Modal -->
-    <div class="modal fade" id="orderDetailsModal" tabindex="-1">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Order Details</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-            ></button>
-          </div>
-          <div class="modal-body" id="orderDetailsContent">
-            <!-- Order details will be loaded here -->
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Status Update Modal -->
-    <div class="modal fade" id="statusUpdateModal" tabindex="-1">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Update Order Status</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <form id="statusUpdateForm">
-              <div class="mb-3">
-                <label class="form-label">New Status:</label>
-                <select class="form-select" id="newStatus" required>
-                  <option value="">Select Status</option>
-                  <option value="pending">Pending</option>
-                  <option value="processing">Processing</option>
-                  <option value="shipped">Shipped</option>
-                  <option value="delivered">Delivered</option>
-                  <option value="cancelled">Cancelled</option>
-                </select>
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Tracking ID (optional):</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="trackingId"
-                  placeholder="Enter tracking ID"
-                />
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
-              Cancel
-            </button>
-            <button
-              type="button"
-              class="btn btn-primary"
-              onclick="updateOrderStatus()"
-            >
-              Update Status
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Toast for notifications -->
-    <div class="toast-container position-fixed bottom-0 end-0 p-3">
-      <div
-        id="actionToast"
-        class="toast"
-        role="alert"
-        aria-live="assertive"
-        aria-atomic="true"
-      >
-        <div class="toast-header">
-          <strong class="me-auto">Action Result</strong>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="toast"
-          ></button>
-        </div>
-        <div class="toast-body" id="toastMessage"></div>
-      </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-      // Check admin authorization
-      document.addEventListener("DOMContentLoaded", () => {
-        const role = localStorage.getItem("u2yCwN4hBx");
-        if (!role || role !== "62330a0c-a52c-4632-b39b-7c3c90bd1f87") {
-          window.location.href = "/index.html";
-          return;
-        }
-
-        // Load orders when page loads
-        loadOrders();
-
-        // Setup logout functionality
-        document.getElementById("logoutBtn").addEventListener("click", (e) => {
-          e.preventDefault();
-          localStorage.removeItem("u2yCwN4hBx");
-          window.location.href = "/index.html";
-        });
-      });
-
-      let orders = [];
-      let currentOrderId = null;
-
-      async function loadOrders() {
-        const loadingSpinner = document.getElementById("loadingSpinner");
-        const errorMessage = document.getElementById("errorMessage");
-        const ordersTable = document.getElementById("ordersTable");
-
-        // Show loading, hide others
-        loadingSpinner.classList.remove("d-none");
-        errorMessage.classList.add("d-none");
-        ordersTable.classList.add("d-none");
-
-        try {
-          const response = await fetch("/api/admin/order");
-
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-
-          const result = await response.json();
-          orders = result.data || result;
-          displayOrders(orders);
-
-          // Show table, hide loading
-          loadingSpinner.classList.add("d-none");
-          ordersTable.classList.remove("d-none");
-        } catch (error) {
-          console.error("Error loading orders:", error);
-
-          // Show error, hide loading
-          loadingSpinner.classList.add("d-none");
-          errorMessage.classList.remove("d-none");
-        }
-      }
-
-      function displayOrders(ordersData) {
-        const tbody = document.querySelector("#ordersTable tbody");
-        tbody.innerHTML = "";
-
-        ordersData.forEach((order) => {
-          const row = document.createElement("tr");
-
-          // Determine status badge
-          const statusBadge = getStatusBadge(order.status);
-
-          // Format date
-          const orderDate = new Date(order.createdAt).toLocaleDateString(
-            "en-US",
-            {
-              year: "numeric",
-              month: "short",
-              day: "numeric",
-            }
-          );
-
-          // Format total price
-          const totalPrice = parseFloat(order.totalPrice || 0).toFixed(2);
-
-          row.innerHTML = `
-            <td>
-              <strong>#${order.id}</strong>
-              ${
-                order.trackingId
-                  ? `<br><small class="text-muted">Tracking: ${order.trackingId}</small>`
-                  : ""
-              }
->>>>>>> 2af84b33cbb9ac83a17904d7963d0a950bb6f726
             </td>
             <td>
               <div>${order.user_name || "N/A"}</div>
               <small class="text-muted">${order.phone || "No phone"}</small>
             </td>
             <td>${statusBadge}</td>
-<<<<<<< HEAD
             <td><span class="badge bg-info">${order.payment_method || "N/A"
           }</span></td>
             <td><span class="order-total">$${totalPrice}</span></td>
@@ -665,28 +327,11 @@
               </button>
               <button class="btn btn-outline-secondary btn-sm" onclick="openStatusModal(${order.id
           })">
-=======
-            <td><span class="badge bg-info">${
-              order.payment_method || "N/A"
-            }</span></td>
-            <td><span class="order-total">$${totalPrice}</span></td>
-            <td>${orderDate}</td>
-            <td>
-              <button class="btn btn-outline-primary btn-sm me-1" onclick="viewOrderDetails(${
-                order.id
-              })">
-                <i class="fas fa-eye"></i> View
-              </button>
-              <button class="btn btn-outline-secondary btn-sm" onclick="openStatusModal(${
-                order.id
-              })">
->>>>>>> 2af84b33cbb9ac83a17904d7963d0a950bb6f726
                 <i class="fas fa-edit"></i> Status
               </button>
             </td>
           `;
 
-<<<<<<< HEAD
         tbody.appendChild(row);
       });
     }
@@ -721,49 +366,10 @@
                 <strong>${item.product_name || "Unknown Product"}</strong>
                 <div class="text-muted small">Product ID: ${item.product_id
               }</div>
-=======
-          tbody.appendChild(row);
-        });
-      }
-
-      function getStatusBadge(status) {
-        const statusMap = {
-          pending: "bg-warning",
-          processing: "bg-info",
-          shipped: "bg-primary",
-          delivered: "bg-success",
-          cancelled: "bg-danger",
-        };
-
-        const badgeClass = statusMap[status?.toLowerCase()] || "bg-secondary";
-        return `<span class="badge ${badgeClass} status-badge">${
-          status || "Unknown"
-        }</span>`;
-      }
-
-      function viewOrderDetails(orderId) {
-        const order = orders.find((o) => o.id === orderId);
-        if (!order) return;
-
-        const modalContent = document.getElementById("orderDetailsContent");
-
-        let itemsHtml = "";
-        if (order.items && order.items.length > 0) {
-          itemsHtml = order.items
-            .map(
-              (item) => `
-            <div class="d-flex justify-content-between align-items-center border-bottom py-2">
-              <div>
-                <strong>${item.product_name || "Unknown Product"}</strong>
-                <div class="text-muted small">Product ID: ${
-                  item.product_id
-                }</div>
->>>>>>> 2af84b33cbb9ac83a17904d7963d0a950bb6f726
               </div>
               <div class="text-end">
                 <div>Qty: ${item.quantity}</div>
                 <div class="text-success">$${parseFloat(
-<<<<<<< HEAD
                 item.price || 0
               ).toFixed(2)}</div>
               </div>
@@ -776,27 +382,12 @@
       }
 
       modalContent.innerHTML = `
-=======
-                  item.price || 0
-                ).toFixed(2)}</div>
-              </div>
-            </div>
-          `
-            )
-            .join("");
-        } else {
-          itemsHtml = '<div class="text-muted">No items found</div>';
-        }
-
-        modalContent.innerHTML = `
->>>>>>> 2af84b33cbb9ac83a17904d7963d0a950bb6f726
           <div class="row">
             <div class="col-md-6">
               <h6>Order Information</h6>
               <p><strong>Order ID:</strong> #${order.id}</p>
               <p><strong>Customer:</strong> ${order.user_name || "N/A"}</p>
               <p><strong>Status:</strong> ${getStatusBadge(order.status)}</p>
-<<<<<<< HEAD
               <p><strong>Payment Method:</strong> ${order.payment_method || "N/A"
         }</p>
               <p><strong>Order Date:</strong> ${new Date(
@@ -806,32 +397,14 @@
           ? `<p><strong>Tracking ID:</strong> ${order.trackingId}</p>`
           : ""
         }
-=======
-              <p><strong>Payment Method:</strong> ${
-                order.payment_method || "N/A"
-              }</p>
-              <p><strong>Order Date:</strong> ${new Date(
-                order.createdAt
-              ).toLocaleDateString()}</p>
-              ${
-                order.trackingId
-                  ? `<p><strong>Tracking ID:</strong> ${order.trackingId}</p>`
-                  : ""
-              }
->>>>>>> 2af84b33cbb9ac83a17904d7963d0a950bb6f726
             </div>
             <div class="col-md-6">
               <h6>Shipping Information</h6>
               <p><strong>Phone:</strong> ${order.phone || "N/A"}</p>
               <p><strong>Address:</strong> ${order.address || "N/A"}</p>
               <p><strong>Total Amount:</strong> <span class="text-success fs-5">$${parseFloat(
-<<<<<<< HEAD
           order.totalPrice || 0
         ).toFixed(2)}</span></p>
-=======
-                order.totalPrice || 0
-              ).toFixed(2)}</span></p>
->>>>>>> 2af84b33cbb9ac83a17904d7963d0a950bb6f726
             </div>
           </div>
           <hr>
@@ -841,7 +414,6 @@
           </div>
         `;
 
-<<<<<<< HEAD
       const modal = new bootstrap.Modal(
         document.getElementById("orderDetailsModal")
       );
@@ -959,122 +531,3 @@
 </body>
 
 </html>
-=======
-        const modal = new bootstrap.Modal(
-          document.getElementById("orderDetailsModal")
-        );
-        modal.show();
-      }
-
-      function openStatusModal(orderId) {
-        currentOrderId = orderId;
-        const order = orders.find((o) => o.id === orderId);
-
-        if (order) {
-          document.getElementById("newStatus").value = order.status || "";
-          document.getElementById("trackingId").value = order.trackingId || "";
-        }
-
-        const modal = new bootstrap.Modal(
-          document.getElementById("statusUpdateModal")
-        );
-        modal.show();
-      }
-
-      async function updateOrderStatus() {
-        if (!currentOrderId) return;
-
-        const newStatus = document.getElementById("newStatus").value;
-        const trackingId = document.getElementById("trackingId").value;
-
-        if (!newStatus) {
-          showToast("Please select a status", "error");
-          return;
-        }
-
-        try {
-          const response = await fetch(`/api/admin/order/${currentOrderId}`, {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              status: newStatus,
-              trackingId: trackingId || null,
-            }),
-          });
-
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-
-          const result = await response.json();
-
-          // Update the order in the local array
-          const orderIndex = orders.findIndex(
-            (order) => order.id === currentOrderId
-          );
-          if (orderIndex !== -1) {
-            orders[orderIndex].status = newStatus;
-            if (trackingId) {
-              orders[orderIndex].trackingId = trackingId;
-            }
-            displayOrders(orders);
-          }
-
-          // Hide modal and show success toast
-          const modal = bootstrap.Modal.getInstance(
-            document.getElementById("statusUpdateModal")
-          );
-          modal.hide();
-          showToast("Order status updated successfully!", "success");
-
-          currentOrderId = null;
-        } catch (error) {
-          console.error("Error updating order status:", error);
-          showToast(
-            "Failed to update order status. Please try again.",
-            "error"
-          );
-        }
-      }
-
-      function showToast(message, type) {
-        const toastElement = document.getElementById("actionToast");
-        const toastMessage = document.getElementById("toastMessage");
-
-        toastMessage.textContent = message;
-
-        // Change toast color based on type
-        const toastHeader = toastElement.querySelector(".toast-header");
-        toastHeader.className = `toast-header ${
-          type === "success" ? "bg-success text-white" : "bg-danger text-white"
-        }`;
-
-        const toast = new bootstrap.Toast(toastElement);
-        toast.show();
-      }
-
-      // Search functionality
-      function searchOrders(searchTerm) {
-        if (!searchTerm) {
-          displayOrders(orders);
-          return;
-        }
-
-        const filteredOrders = orders.filter(
-          (order) =>
-            order.id.toString().includes(searchTerm) ||
-            order.user_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            order.trackingId
-              ?.toLowerCase()
-              .includes(searchTerm.toLowerCase()) ||
-            order.status?.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-
-        displayOrders(filteredOrders);
-      }
-    </script>
-  </body>
-</html>
->>>>>>> 2af84b33cbb9ac83a17904d7963d0a950bb6f726
