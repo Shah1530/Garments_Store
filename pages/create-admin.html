@@ -120,9 +120,13 @@
       if (logoutBtn) {
         logoutBtn.addEventListener("click", () => {
           localStorage.removeItem("token");
+<<<<<<< HEAD
           localStorage.removeItem("u2yCwN4hBx");
           sessionStorage.removeItem("token");
           sessionStorage.removeItem("u2yCwN4hBx");
+=======
+          sessionStorage.removeItem("token");
+>>>>>>> 2af84b33cbb9ac83a17904d7963d0a950bb6f726
           window.location.href = "../index.html";
         });
       }

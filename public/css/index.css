@@ -106,7 +106,11 @@ html {
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: var(--shadow-sm);
   transition: var(--transition);
+<<<<<<< HEAD
   padding: 1rem 0;
+=======
+  padding: 0rem 0;
+>>>>>>> 2af84b33cbb9ac83a17904d7963d0a950bb6f726
 }
 
 .navbar.scrolled {
