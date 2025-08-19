@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Categories - Online Garments Store</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../public/css/index.css" />
+    <style>
+      :root {
+        --primary-color: #6366f1;
+        --primary-dark: #4f46e5;
+        --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        --border-radius: 0.75rem;
+        --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .card {
+        border-radius: var(--border-radius);
+        transition: var(--transition);
+        border: none;
+      }
+
+      .card:hover {
+        box-shadow: var(--shadow-lg);
+        transform: translateY(-5px);
+      }
+
+      .btn-primary {
+        background: var(--primary-color);
+        border: none;
+      }
+
+      .btn-primary:hover {
+        background: var(--primary-dark);
+      }
+
+      .card-title {
+        margin-bottom: 0.75rem;
+        font-weight: 600;
+      }
+
+      .card-text {
+        min-height: 40px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="index.html">Online Garments Store</a>
+        <div class="collapse navbar-collapse">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="products.html">Shop</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="cart.html">Cart</a>
+            </li>
+            <li class="nav-item" id="auth-link"></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main content -->
+    <div class="container mt-5">
+      <h1 class="mb-4">Categories</h1>
+      <div id="categories-container" class="row row-cols-1 row-cols-md-3 g-4">
+        <!-- Categories will be injected here -->
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", async () => {
+        const token = localStorage.getItem("token");
+        const authLink = document.getElementById("auth-link");
+
+        if (token) {
+          authLink.innerHTML = `
+            <li class="nav-item" style="display:flex;">
+              <a class="nav-link" href="my-account.html">My Account</a>
+              <p class="nav-link" style="cursor: pointer;" id="logoutBtn">Logout</p>
+            </li>
+          `;
+        } else {
+          authLink.innerHTML = `
+            <li class="nav-item" style="display:flex;">
+              <a class="nav-link" href="signin.html">Sign In</a>
+              <a class="nav-link" href="signup.html">Sign Up</a>
+            </li>
+          `;
+        }
+
+        if (token) {
+          const logoutBtn = document.getElementById("logoutBtn");
+          logoutBtn.addEventListener("click", () => {
+            localStorage.removeItem("token");
+            localStorage.removeItem("u2yCwN4hBx");
+            sessionStorage.removeItem("token");
+            sessionStorage.removeItem("u2yCwN4hBx");
+            window.location.href = "../index.html";
+          });
+        }
+
+        const container = document.getElementById("categories-container");
+
+        try {
+          const response = await fetch("/api/admin/category");
+          if (!response.ok) throw new Error("Failed to fetch categories");
+
+          const result = await response.json();
+          const categories = result.data;
+
+          if (!categories || categories.length === 0) {
+            container.innerHTML = `<p class="text-muted">No categories available.</p>`;
+            return;
+          }
+
+          categories.forEach((category) => {
+            const col = document.createElement("div");
+            col.className = "col";
+
+            col.innerHTML = `
+            <div class="card h-100 shadow-sm">
+              <div class="card-body text-center d-flex flex-column justify-content-between">
+                <div>
+                  <h5 class="card-title">${category.name}</h5>
+                  <p class="card-text text-muted">${
+                    category.description ||
+                    "Explore the latest products in this category."
+                  }</p>
+                </div>
+                <a href="products.html?category=${encodeURIComponent(
+                  category.name
+                )}" class="btn btn-primary mt-3">
+                  View Products
+                </a>
+              </div>
+            </div>
+          `;
+
+            container.appendChild(col);
+          });
+        } catch (err) {
+          console.error(err);
+          container.innerHTML = `<p class="text-danger">Failed to load categories.</p>`;
+        }
+      });
+    </script>
+  </body>
+</html>

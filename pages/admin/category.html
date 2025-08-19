@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manage Categories - Online Garments Store</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+
+    .navbar-brand {
+      font-weight: bold;
+    }
+
+    .content-container {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+    }
+
+    .btn-sm {
+      font-size: 0.875rem;
+      padding: 0.375rem 0.75rem;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+    }
+
+    .error {
+      color: #dc3545;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .search-add-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      gap: 15px;
+    }
+
+    .search-box {
+      flex: 1;
+      max-width: 300px;
+    }
+
+    .category-actions {
+      white-space: nowrap;
+    }
+
+    .category-name {
+      font-weight: 500;
+      color: #495057;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px;
+      color: #6c757d;
+    }
+
+    .empty-state i {
+      font-size: 3rem;
+      margin-bottom: 15px;
+      color: #dee2e6;
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="admin/index.html">Garments Store Admin</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="../Index.html">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="products.html">Products</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="category.html">Category</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="orders.html">Orders</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="users.html">Users</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="../create-admin.html">Create Admin</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" id="logoutBtn">Logout</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-5">
+    <h1 class="text-center mb-4">Manage Categories</h1>
+
+    <div class="content-container">
+      <!-- Search and Add Container -->
+      <div class="search-add-container">
+        <div class="search-box">
+          <input type="text" class="form-control" id="searchInput" placeholder="Search categories..."
+            onkeyup="searchCategories(this.value)" />
+        </div>
+        <button class="btn btn-primary" onclick="openAddModal()">
+          <i class="fas fa-plus"></i> Add Category
+        </button>
+      </div>
+
+      <!-- Loading Spinner -->
+      <div id="loadingSpinner" class="loading">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-2">Loading categories...</p>
+      </div>
+
+      <!-- Error Message -->
+      <div id="errorMessage" class="error d-none">
+        <p>Failed to load categories. Please try again.</p>
+        <button class="btn btn-primary" onclick="loadCategories()">
+          Retry
+        </button>
+      </div>
+
+      <!-- Categories Table -->
+      <div class="table-responsive">
+        <table class="table table-striped d-none" id="categoriesTable">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Category Name</th>
+              <th width="150">Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <!-- Empty State -->
+      <div id="emptyState" class="empty-state d-none">
+        <i class="fas fa-tags"></i>
+        <h5>No Categories Found</h5>
+        <p>Start by adding your first category to organize your products.</p>
+        <button class="btn btn-primary" onclick="openAddModal()">
+          <i class="fas fa-plus"></i> Add First Category
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add/Edit Category Modal -->
+  <div class="modal fade" id="categoryModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalTitle">Add Category</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form id="categoryForm">
+            <div class="mb-3">
+              <label for="categoryName" class="form-label">Category Name <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="categoryName" name="name" required
+                placeholder="Enter category name" maxlength="100" />
+              <div class="form-text">Maximum 100 characters</div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            Cancel
+          </button>
+          <button type="button" class="btn btn-primary" onclick="saveCategory()">
+            <span id="saveButtonText">Save Category</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Confirm Delete</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <p>
+            Are you sure you want to delete the category "<strong id="categoryToDelete"></strong>"?
+          </p>
+          <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle"></i>
+            <strong>Warning:</strong> This action cannot be undone. Products
+            associated with this category may be affected.
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            Cancel
+          </button>
+          <button type="button" class="btn btn-danger" onclick="confirmDelete()">
+            <i class="fas fa-trash"></i> Delete Category
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast for notifications -->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="actionToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header">
+        <strong class="me-auto">Action Result</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+      </div>
+      <div class="toast-body" id="toastMessage"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Check admin authorization
+    document.addEventListener("DOMContentLoaded", () => {
+      const role = localStorage.getItem("u2yCwN4hBx");
+      if (!role || role !== "62330a0c-a52c-4632-b39b-7c3c90bd1f87") {
+        window.location.href = "/index.html";
+        return;
+      }
+
+      // Load categories when page loads
+      loadCategories();
+
+      // Setup logout functionality
+      document.getElementById("logoutBtn").addEventListener("click", (e) => {
+        e.preventDefault();
+        localStorage.removeItem("token");
+        localStorage.removeItem("u2yCwN4hBx");
+        sessionStorage.removeItem("token");
+        sessionStorage.removeItem("u2yCwN4hBx");
+        window.location.href = "/index.html";
+      });
+    });
+
+    let categories = [];
+    let currentCategoryId = null;
+    let isEditMode = false;
+    let categoryToDeleteId = null;
+
+    // Load all categories
+    async function loadCategories() {
+      const loadingSpinner = document.getElementById("loadingSpinner");
+      const errorMessage = document.getElementById("errorMessage");
+      const categoriesTable = document.getElementById("categoriesTable");
+      const emptyState = document.getElementById("emptyState");
+
+      // Show loading, hide others
+      loadingSpinner.classList.remove("d-none");
+      errorMessage.classList.add("d-none");
+      categoriesTable.classList.add("d-none");
+      emptyState.classList.add("d-none");
+
+      try {
+        const response = await fetch("/api/admin/category");
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        categories = result.data || result;
+
+        if (categories.length === 0) {
+          // Show empty state
+          loadingSpinner.classList.add("d-none");
+          emptyState.classList.remove("d-none");
+        } else {
+          displayCategories(categories);
+          // Show table, hide loading
+          loadingSpinner.classList.add("d-none");
+          categoriesTable.classList.remove("d-none");
+        }
+      } catch (error) {
+        console.error("Error loading categories:", error);
+        // Show error, hide loading
+        loadingSpinner.classList.add("d-none");
+        errorMessage.classList.remove("d-none");
+      }
+    }
+
+    // Display categories in table
+    function displayCategories(categoriesData) {
+      const tbody = document.querySelector("#categoriesTable tbody");
+      tbody.innerHTML = "";
+
+      categoriesData.forEach((category) => {
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+            <td><strong>#${category.id}</strong></td>
+            <td><span class="category-name">${escapeHtml(
+          category.name
+        )}</span></td>
+            <td class="category-actions">
+              <button class="btn btn-outline-primary btn-sm me-1" onclick="openEditModal(${category.id
+          })" title="Edit">
+                <i class="fas fa-edit"></i>
+                Edit
+              </button>
+              <button class="btn btn-outline-danger btn-sm" onclick="openDeleteModal(${category.id
+          })" title="Delete">
+                <i class="fas fa-trash"></i>
+                Delete
+              </button>
+            </td>
+          `;
+
+        tbody.appendChild(row);
+      });
+    }
+
+    // Open add modal
+    function openAddModal() {
+      isEditMode = false;
+      currentCategoryId = null;
+      document.getElementById("modalTitle").textContent = "Add Category";
+      document.getElementById("saveButtonText").textContent = "Save Category";
+      document.getElementById("categoryForm").reset();
+
+      const modal = new bootstrap.Modal(
+        document.getElementById("categoryModal")
+      );
+      modal.show();
+    }
+
+    // Open edit modal
+    function openEditModal(categoryId) {
+      const category = categories.find((c) => c.id === categoryId);
+      if (!category) return;
+
+      isEditMode = true;
+      currentCategoryId = categoryId;
+      document.getElementById("modalTitle").textContent = "Edit Category";
+      document.getElementById("saveButtonText").textContent =
+        "Update Category";
+      document.getElementById("categoryName").value = category.name;
+
+      const modal = new bootstrap.Modal(
+        document.getElementById("categoryModal")
+      );
+      modal.show();
+    }
+
+    // Save category (create or update)
+    async function saveCategory() {
+      const form = document.getElementById("categoryForm");
+      const categoryName = document
+        .getElementById("categoryName")
+        .value.trim();
+
+      if (!categoryName) {
+        showToast("Please enter a category name", "error");
+        return;
+      }
+
+      // Check for duplicate names (excluding current category when editing)
+      const existingCategory = categories.find(
+        (c) =>
+          c.name.toLowerCase() === categoryName.toLowerCase() &&
+          c.id !== currentCategoryId
+      );
+
+      if (existingCategory) {
+        showToast("A category with this name already exists", "error");
+        return;
+      }
+
+      try {
+        const url = isEditMode
+          ? `/api/admin/category/${currentCategoryId}`
+          : "/api/admin/category";
+
+        const method = isEditMode ? "PUT" : "POST";
+
+        const response = await fetch(url, {
+          method: method,
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: categoryName,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        // Hide modal
+        const modal = bootstrap.Modal.getInstance(
+          document.getElementById("categoryModal")
+        );
+        modal.hide();
+
+        // Show success message
+        const action = isEditMode ? "updated" : "created";
+        showToast(`Category ${action} successfully!`, "success");
+
+        // Reload categories
+        loadCategories();
+      } catch (error) {
+        console.error("Error saving category:", error);
+        const action = isEditMode ? "update" : "create";
+        showToast(`Failed to ${action} category. Please try again.`, "error");
+      }
+    }
+
+    // Open delete modal
+    function openDeleteModal(categoryId) {
+      const category = categories.find((c) => c.id === categoryId);
+      if (!category) return;
+
+      categoryToDeleteId = categoryId;
+      document.getElementById("categoryToDelete").textContent = category.name;
+
+      const modal = new bootstrap.Modal(
+        document.getElementById("deleteModal")
+      );
+      modal.show();
+    }
+
+    // Confirm delete
+    async function confirmDelete() {
+      if (!categoryToDeleteId) return;
+
+      try {
+        const response = await fetch(
+          `/api/admin/category/${categoryToDeleteId}`,
+          {
+            method: "DELETE",
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        // Hide modal
+        const modal = bootstrap.Modal.getInstance(
+          document.getElementById("deleteModal")
+        );
+        modal.hide();
+
+        // Show success message
+        showToast("Category deleted successfully!", "success");
+
+        // Reload categories
+        loadCategories();
+
+        categoryToDeleteId = null;
+      } catch (error) {
+        console.error("Error deleting category:", error);
+        showToast("Failed to delete category. Please try again.", "error");
+      }
+    }
+
+    // Search categories
+    function searchCategories(searchTerm) {
+      if (!searchTerm) {
+        displayCategories(categories);
+        return;
+      }
+
+      const filteredCategories = categories.filter((category) =>
+        category.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+
+      displayCategories(filteredCategories);
+    }
+
+    // Show toast notification
+    function showToast(message, type) {
+      const toastElement = document.getElementById("actionToast");
+      const toastMessage = document.getElementById("toastMessage");
+
+      toastMessage.textContent = message;
+
+      // Change toast color based on type
+      const toastHeader = toastElement.querySelector(".toast-header");
+      toastHeader.className = `toast-header ${type === "success" ? "bg-success text-white" : "bg-danger text-white"
+        }`;
+
+      const toast = new bootstrap.Toast(toastElement);
+      toast.show();
+    }
+
+    // Escape HTML to prevent XSS
+    function escapeHtml(text) {
+      const div = document.createElement("div");
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // Handle enter key in category name input
+    document.addEventListener("keydown", function (e) {
+      if (
+        e.key === "Enter" &&
+        document.getElementById("categoryModal").classList.contains("show")
+      ) {
+        e.preventDefault();
+        saveCategory();
+      }
+    });
+  </script>
+</body>
+
+</html>
